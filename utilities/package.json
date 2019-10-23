@@ -1,0 +1,53 @@
+{
+    "name": "utilities",
+    "displayName": "utilities",
+    "description": "",
+    "version": "0.0.2",
+    "publisher": "ktuan89",
+    "engines": {
+        "vscode": "^1.39.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "*"
+    ],
+    "main": "./out/extension",
+    "contributes": {
+        "commands": [
+            {
+                "command": "extension.gotoSameWord",
+                "title": "Goto Same Word"
+            }
+        ]
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "postinstall": "node ./node_modules/vscode/bin/install",
+        "test": "npm run compile && node ./node_modules/vscode/bin/test"
+    },
+    "devDependencies": {
+        "typescript": "^2.6.1",
+        "vscode": "^1.1.6",
+        "tslint": "^5.8.0",
+        "@types/node": "^7.0.43",
+        "@types/mocha": "^2.2.42"
+    },
+    "keybindings": [
+        {
+            "key": "ctrl+e",
+            "command": "extension.gotoSameWord"
+        },
+        {
+            "key": "cmd+shift+\\",
+            "command": "extension.openFileAtCursor"
+        },
+        {
+            "key": "ctrl+c",
+            "command": "extension.copyCurrentWord"
+        }
+    ]
+}
