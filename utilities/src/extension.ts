@@ -128,9 +128,37 @@ export function activate(context: vscode.ExtensionContext) {
         }
     });
 
+    let filterLinesDisposable = vscode.commands.registerCommand('extension.filterLines', async () => {
+        let input = await vscode.window.showInputBox();
+        if (input) {
+            const editor = vscode.window.activeTextEditor;
+            if (editor) {
+                let filterOut = false;
+                let matchStr =  input;
+                if (input.startsWith("-")) {
+                    filterOut = true;
+                }
+                if (input.startsWith("-") || input.startsWith("+")) {
+                    matchStr = input.slice(1);
+                }
+                editor.edit(editBuilder => {
+                    for (let row = 0; row < editor.document.lineCount; row++) {
+                        const textLine = editor.document.lineAt(row);
+                        // console.log(textLine.range.end.line + " " + textLine.range.end.character + " " + textLine.rangeIncludingLineBreak.end.line + " " + textLine.rangeIncludingLineBreak.end.character);
+                        const isMatching = textLine.text.indexOf(matchStr) >= 0;
+                        if ((isMatching && filterOut) || (!isMatching && !filterOut)) {
+                            editBuilder.delete(new vscode.Range(new vscode.Position(row, 0), new vscode.Position(row + 1, 0)));
+                        }
+                    }
+                });
+            }
+        }
+    });
+
     context.subscriptions.push(gotoSameWordDisposable);
     context.subscriptions.push(openFileAtCursorDisposable);
     context.subscriptions.push(copyCurrentWordDisposable);
+    context.subscriptions.push(filterLinesDisposable);
 }
 
 // this method is called when your extension is deactivated
